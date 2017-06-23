@@ -96,9 +96,13 @@ void Chauvenet::verificaAmostras(void)
             flagDeDescarte[i] = false;
         }
         mediaAposDescarte = mediaInicial;
+        qtdAmostrasNaoRejeitadas = quantidadeDeAmostras;
+        qtdAmostrasRejeitadas = 0;
+
         #ifdef DEBUG_ON_PC
             std::cout << "\nDesvio Padrao zero!\n";
         #endif
+
     }
     else
     {
@@ -116,8 +120,11 @@ void Chauvenet::verificaAmostras(void)
             #ifdef DEBUG_ON_PC
                 std::cout << "flagDeDescarte[" << i << "] = " << flagDeDescarte[i] << "\n";
             #endif
+
         }
         calculaMediaAposDescarte();
+        setAmostrasRejeitadas();
+        setAmostrasNaoRejeitadas();
         #ifdef DEBUG_ON_PC
             std::cout << "Media apos decarte: " << mediaAposDescarte << "\n";
         #endif
@@ -151,11 +158,73 @@ void Chauvenet::calculaMediaAposDescarte(void)
         return (-1*num);
  }
 
+double Chauvenet::getMediaInicial ()
+{
+    return mediaInicial;
+}
+double Chauvenet::getDesvioPadrao ()
+{
+    return desvioPadrao;
+}
 
+void Chauvenet::getFlagDeDescarte( bool* vet)
+{
+    int i = 0;
+    for (i = 0; i < quantidadeDeAmostras; i++)
+    {
+        vet[i] = flagDeDescarte[i];
+    }
+}
 
+ void Chauvenet::setAmostrasRejeitadas(void)
+ {
+     int i = 0;
+     int j = 0;
+     for (i = 0; i < quantidadeDeAmostras; i++)
+     {
+         if ( flagDeDescarte[i] == true)
+         {
+             amostrasRejeitadas[j] = amostras[i];
+             j++;
+         }
+     }
+     qtdAmostrasRejeitadas = j;
 
+ }
 
+void Chauvenet::setAmostrasNaoRejeitadas(void)
+{
+     int i = 0;
+     int j = 0;
+     for (i = 0; i < quantidadeDeAmostras; i++)
+     {
+         if ( flagDeDescarte[i] == false)
+         {
+             amostrasNaoRejeitadas[j] = amostras[i];
+             j++;
+         }
+     }
+     qtdAmostrasNaoRejeitadas = j;
 
+}
 
+ int Chauvenet::getQtdAmostrasRejeitadas (void)
+ {
+    return qtdAmostrasRejeitadas;
+ }
+int Chauvenet::getQtdAmostrasNaoRejeitadas (void)
+{
+    return qtdAmostrasNaoRejeitadas;
+}
+
+const double* const Chauvenet::getAmostrasRejeitadas(void)
+{
+    return (const double* const)(amostrasRejeitadas);
+
+}
+const double* const Chauvenet::getAmostrasNaoRejeitadas(void)
+{
+    return (const double* const)(amostrasNaoRejeitadas);
+}
 
 
